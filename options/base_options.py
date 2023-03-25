@@ -34,6 +34,7 @@ class BaseOptions():
         parser.add_argument('--eval_batch_nums', type=float, default=float('inf'), help='batch nums of images for evaluation')
         parser.add_argument('--use_ddp', type=util.str2bool, nargs='?', const=True, default=True, help='whether use distributed data parallel')
         parser.add_argument('--ddp_port', type=str, default='12355', help='ddp port')
+        parser.add_argument('--find_unused_parameters', action="store_true", help='ddp flag')
         parser.add_argument('--display_per_batch', type=util.str2bool, nargs='?', const=True, default=True, help='whether use batch to show losses')
         parser.add_argument('--add_image', type=util.str2bool, nargs='?', const=True, default=True, help='whether add image to tensorboard')
         parser.add_argument('--disp_img_limit', type=int, default=np.inf, help='how many images of a training batch to add to tensorboard')

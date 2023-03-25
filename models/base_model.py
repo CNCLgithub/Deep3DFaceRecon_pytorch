@@ -116,9 +116,12 @@ class BaseModel(ABC):
                     module = getattr(self, name)
                     if convert_sync_batchnorm:
                         module = torch.nn.SyncBatchNorm.convert_sync_batchnorm(module)
-                    setattr(self, name, torch.nn.parallel.DistributedDataParallel(module.to(self.device),
-                        device_ids=[self.device.index], 
-                        find_unused_parameters=True, broadcast_buffers=True))
+                    setattr(self, name,
+                            torch.nn.parallel.DistributedDataParallel(
+                                module.to(self.device),
+                                device_ids=[self.device.index],
+                                find_unused_parameters=self.opt.find_unused_parameters,
+                                broadcast_buffers=True))
             
             # DistributedDataParallel is not needed when a module doesn't have any parameter that requires a gradient.
             for name in self.parallel_names:
