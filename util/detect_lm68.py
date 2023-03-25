@@ -50,10 +50,8 @@ def load_lm_graph(graph_filename):
     return lm_sess,img_224,output_lm
 
 # landmark detection
-def detect_68p(img_path,sess,input_op,output_op):
+def detect_68p(img_path,names,sess,input_op,output_op):
     print('detecting landmarks......')
-    names = [i for i in sorted(os.listdir(
-        img_path)) if 'jpg' in i or 'png' in i or 'jpeg' in i or 'PNG' in i]
     vis_path = os.path.join(img_path, 'vis')
     remove_path = os.path.join(img_path, 'remove')
     save_path = os.path.join(img_path, 'landmarks')
@@ -66,7 +64,6 @@ def detect_68p(img_path,sess,input_op,output_op):
 
     for i in range(0, len(names)):
         name = names[i]
-        print('%05d' % (i), ' ', name)
         full_image_name = os.path.join(img_path, name)
         txt_name = '.'.join(name.split('.')[:-1]) + '.txt'
         full_txt_name = os.path.join(img_path, 'detections', txt_name) # 5 facial landmark path for each image

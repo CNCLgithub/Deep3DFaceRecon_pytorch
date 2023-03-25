@@ -108,17 +108,15 @@ def skinmask(imbgr):
     return post_skin
 
 
-def get_skin_mask(img_path):
+def get_skin_mask(img_path, names):
     print('generating skin masks......')
-    names = [i for i in sorted(os.listdir(
-        img_path)) if 'jpg' in i or 'png' in i or 'jpeg' in i or 'PNG' in i]
     save_path = os.path.join(img_path, 'mask')
     if not os.path.isdir(save_path):
         os.makedirs(save_path)
     
     for i in range(0, len(names)):
         name = names[i]
-        print('%05d' % (i), ' ', name)
+        # print('%05d' % (i), ' ', name)
         full_image_name = os.path.join(img_path, name)
         img = cv2.imread(full_image_name).astype(np.float32)
         skin_img = skinmask(img)

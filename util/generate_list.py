@@ -30,5 +30,5 @@ def check_list(rlms_list, rimgs_list, rmsks_list):
             lms_list.append(rlms_list[i])
             imgs_list.append(rimgs_list[i])
             msks_list.append(rmsks_list[i])
-        print(i, rlms_list[i], flag)
+        # print(i, rlms_list[i], flag)
     return lms_list, imgs_list, msks_list
