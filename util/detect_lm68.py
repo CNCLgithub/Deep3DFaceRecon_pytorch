@@ -2,9 +2,10 @@ import os
 import cv2
 import numpy as np
 from scipy.io import loadmat
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from util.preprocess import align_for_lm
 from shutil import move
+tf.compat.v1.disable_v2_behavior()
 
 mean_face = np.loadtxt('util/test_mean_face.txt')
 mean_face = mean_face.reshape([68, 2])
@@ -37,7 +38,7 @@ def load_data(img_name, txt_name):
 
 # create tensorflow graph for landmark detector
 def load_lm_graph(graph_filename):
-    with tf.gfile.GFile(graph_filename, 'rb') as f:
+    with tf.io.gfile.GFile(graph_filename, 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
 
