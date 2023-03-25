@@ -87,9 +87,12 @@ def main(rank, world_size, train_opt):
 
             if rank == 0 and (total_iters == batch_size or total_iters % train_opt.display_freq == 0):   # display images on visdom and save images to a HTML file
                 model.compute_visuals()
-                visualizer.display_current_results(model.get_current_visuals(), total_iters, epoch,
-                    save_results=True,
-                    add_image=train_opt.add_image)
+                visualizer.display_current_results(
+                    model.get_current_visuals(), total_iters, epoch,
+                    save_results=False,
+                    add_image=train_opt.add_image,
+                    disp_img_limit=train_opt.disp_img_limit
+                )
                     # (total_iters == batch_size or total_iters % train_opt.evaluation_freq == 0)
             
             if rank == 0 and (total_iters == batch_size or total_iters % train_opt.print_freq == 0):    # print training losses and save logging information to the disk

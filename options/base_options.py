@@ -30,12 +30,13 @@ class BaseOptions():
         parser.add_argument('--name', type=str, default='face_recon', help='name of the experiment. It decides where to store samples and models')
         parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
         parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
-        parser.add_argument('--vis_batch_nums', type=float, default=1, help='batch nums of images for visulization')
+        parser.add_argument('--vis_batch_nums', type=float, default=1, help='batch nums of images for visualization')
         parser.add_argument('--eval_batch_nums', type=float, default=float('inf'), help='batch nums of images for evaluation')
         parser.add_argument('--use_ddp', type=util.str2bool, nargs='?', const=True, default=True, help='whether use distributed data parallel')
         parser.add_argument('--ddp_port', type=str, default='12355', help='ddp port')
         parser.add_argument('--display_per_batch', type=util.str2bool, nargs='?', const=True, default=True, help='whether use batch to show losses')
         parser.add_argument('--add_image', type=util.str2bool, nargs='?', const=True, default=True, help='whether add image to tensorboard')
+        parser.add_argument('--disp_img_limit', type=int, default=np.inf, help='how many images of a training batch to add to tensorboard')
         parser.add_argument('--world_size', type=int, default=1, help='batch nums of images for evaluation')
 
         # model parameters
