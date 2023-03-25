@@ -22,7 +22,8 @@ class FaceReconModel(BaseModel):
         """
         # net structure and parameters
         parser.add_argument('--net_recon', type=str, default='resnet50', choices=['resnet18', 'resnet34', 'resnet50'], help='network structure')
-        parser.add_argument('--init_path', type=str, default='checkpoints/init_model/resnet50-0676ba61.pth')
+        # parser.add_argument('--init_path', type=str, default='checkpoints/init_model/resnet50-0676ba61.pth')
+        parser.add_argument('--no-pretrained', action="store_false", dest="pretrained")
         parser.add_argument('--use_last_fc', type=util.str2bool, nargs='?', const=True, default=False, help='zero initialize the last fc')
         parser.add_argument('--bfm_folder', type=str, default='BFM')
         parser.add_argument('--bfm_model', type=str, default='BFM_model_front.mat', help='bfm model')
@@ -88,7 +89,7 @@ class FaceReconModel(BaseModel):
         self.parallel_names = self.model_names + ['renderer']
 
         self.net_recon = networks.define_net_recon(
-            net_recon=opt.net_recon, use_last_fc=opt.use_last_fc, init_path=opt.init_path
+            net_recon=opt.net_recon, use_last_fc=opt.use_last_fc, pretrained=opt.pretrained
         )
 
         self.facemodel = ParametricFaceModel(
