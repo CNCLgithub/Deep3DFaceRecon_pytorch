@@ -16,7 +16,7 @@ class TrainOptions(BaseOptions):
         # for train
         parser.add_argument('--data_root', type=str, default='./', help='dataset root')
         parser.add_argument('--flist', type=str, default='datalist/train/masks.txt', help='list of mask names of training set')
-        parser.add_argument('--batch_size', type=int, default=32)
+        parser.add_argument('--batch_size', type=int, default=64)
         parser.add_argument('--dataset_mode', type=str, default='flist', help='chooses how datasets are loaded. [None | flist]')
         parser.add_argument('--serial_batches', action='store_true', help='if true, takes images in order to make batches, otherwise takes them randomly')
         parser.add_argument('--num_threads', default=4, type=int, help='# threads for loading data')
@@ -26,7 +26,7 @@ class TrainOptions(BaseOptions):
 
         # for val
         parser.add_argument('--flist_val', type=str, default='datalist/val/masks.txt', help='list of mask names of val set')
-        parser.add_argument('--batch_size_val', type=int, default=32)
+        parser.add_argument('--batch_size_val', type=int, default=64)
 
 
         # visualization parameters

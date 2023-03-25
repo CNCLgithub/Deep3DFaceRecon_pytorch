@@ -162,6 +162,8 @@ class BaseOptions():
                         opt.epoch_count = max(epoch_counts) + 1
                 else:
                     opt.epoch_count = int(opt.epoch) + 1
+
+                print(f"Continuing training at epoch {opt.epoch_count}")
                     
 
         self.print_options(opt)

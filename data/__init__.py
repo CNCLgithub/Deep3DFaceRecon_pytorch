@@ -82,18 +82,22 @@ class CustomDatasetDataLoader():
                     shuffle=not opt.serial_batches
                 )
             self.dataloader = torch.utils.data.DataLoader(
-                        self.dataset,
-                        sampler=self.sampler,
-                        num_workers=int(opt.num_threads / world_size), 
-                        batch_size=int(opt.batch_size / world_size), 
-                        drop_last=True)
+                self.dataset,
+                sampler=self.sampler,
+                num_workers=opt.num_threads,
+                # num_workers=int(opt.num_threads / world_size),
+                batch_size=int(opt.batch_size / world_size),
+                drop_last=True,
+                pin_memory=True
+            )
         else:
             self.dataloader = torch.utils.data.DataLoader(
                 self.dataset,
                 batch_size=opt.batch_size,
                 shuffle=(not opt.serial_batches) and opt.isTrain,
-                num_workers=int(opt.num_threads),
-                drop_last=True
+                num_workers=opt.num_threads,
+                drop_last=True,
+                pin_memory=True,
             )
 
     def set_epoch(self, epoch):

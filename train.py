@@ -5,6 +5,7 @@ import os
 import time
 import numpy as np
 import torch
+from tqdm import tqdm
 from options.train_options import TrainOptions
 from data import create_dataset
 from models import create_model
@@ -15,11 +16,11 @@ import torch.distributed as dist
 
 
 def setup(rank, world_size, port):
-    os.environ['MASTER_ADDR'] = 'localhost'
-    os.environ['MASTER_PORT'] = port
+    # os.environ['MASTER_ADDR'] = 'localhost'
+    # os.environ['MASTER_PORT'] = port
 
     # initialize the process group
-    dist.init_process_group("gloo", rank=rank, world_size=world_size)
+    dist.init_process_group("nccl", rank=rank, world_size=world_size)
 
 def cleanup():
     dist.destroy_process_group()
@@ -65,7 +66,7 @@ def main(rank, world_size, train_opt):
         epoch_iter = 0                  # the number of training iterations in current epoch, reset to 0 every epoch
 
         train_dataset.set_epoch(epoch)
-        for i, train_data in enumerate(train_dataset):  # inner loop within one epoch
+        for i, train_data in tqdm(enumerate(train_dataset)):  # inner loop within one epoch
             iter_start_time = time.time()  # timer for computation per iteration
             if total_iters % train_opt.print_freq == 0:
                 t_data = iter_start_time - iter_data_time
@@ -102,7 +103,7 @@ def main(rank, world_size, train_opt):
                     val_start_time = time.time()
                     losses_avg = {}
                     model.eval()
-                    for j, val_data in enumerate(val_dataset):
+                    for j, val_data in tqdm(enumerate(val_dataset)):
                         model.set_input(val_data)
                         model.optimize_parameters(isTrain=False)
                         if rank == 0 and j < train_opt.vis_batch_nums:
@@ -158,7 +159,7 @@ if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     
     train_opt = TrainOptions().parse()   # get training options
-    world_size = train_opt.world_size               
+    world_size = train_opt.world_size
 
     if train_opt.use_ddp:
         mp.spawn(main, args=(world_size, train_opt), nprocs=world_size, join=True)

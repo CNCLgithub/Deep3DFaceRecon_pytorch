@@ -114,6 +114,8 @@ class FaceReconModel(BaseModel):
             self.compute_reg_loss = reg_loss
             self.compute_reflc_loss = reflectance_loss
 
+            # scale the learning rate
+            lr = opt.lr * np.sqrt(opt.world_size*opt.batch_size/32.)
             self.optimizer = torch.optim.Adam(self.net_recon.parameters(), lr=opt.lr)
             self.optimizers = [self.optimizer]
             self.parallel_names += ['net_recog']
