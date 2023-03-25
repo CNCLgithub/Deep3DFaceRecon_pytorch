@@ -53,12 +53,9 @@ def load_lm_graph(graph_filename):
 def detect_68p(img_path,names,sess,input_op,output_op):
     print('detecting landmarks......')
     vis_path = os.path.join(img_path, 'vis')
-    remove_path = os.path.join(img_path, 'remove')
     save_path = os.path.join(img_path, 'landmarks')
     if not os.path.isdir(vis_path):
         os.makedirs(vis_path)
-    if not os.path.isdir(remove_path):
-        os.makedirs(remove_path)
     if not os.path.isdir(save_path):
         os.makedirs(save_path)
 
@@ -68,21 +65,9 @@ def detect_68p(img_path,names,sess,input_op,output_op):
         txt_name = '.'.join(name.split('.')[:-1]) + '.txt'
         full_txt_name = os.path.join(img_path, 'detections', txt_name) # 5 facial landmark path for each image
 
-        # if an image does not have detected 5 facial landmarks, remove it from the training list
-        if not os.path.isfile(full_txt_name):
-            move(full_image_name, os.path.join(remove_path, name))
-            continue 
-
         # load data
         img, five_points = load_data(full_image_name, full_txt_name)
         input_img, scale, bbox = align_for_lm(img, five_points) # align for 68 landmark detection 
-
-        # if the alignment fails, remove corresponding image from the training list
-        if scale == 0:
-            move(full_txt_name, os.path.join(
-                remove_path, txt_name))
-            move(full_image_name, os.path.join(remove_path, name))
-            continue
 
         # detect landmarks
         input_img = np.reshape(
