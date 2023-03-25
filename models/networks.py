@@ -3,6 +3,7 @@
 
 import os
 import numpy as np
+from torchvision.models import vgg19
 import torch.nn.functional as F
 from torch.nn import init
 import functools
@@ -67,6 +68,11 @@ def define_net_recog(net_recog, pretrained_path=None):
     net.eval()
     return net
 
+# https://discuss.pytorch.org/t/how-to-re-set-alll-parameters-in-a-network/20819/2
+def weight_reset(m):
+    if isinstance(m, nn.Conv2d) or isinstance(m, nn.Linear):
+        m.reset_parameters()
+
 class ReconNetWrapper(nn.Module):
     fc_dim=257
     def __init__(self, net_recon, use_last_fc=False, pretrained=True):
@@ -102,6 +108,14 @@ class ReconNetWrapper(nn.Module):
             else:
                 self.backbone.fc = \
                     nn.Linear(self.backbone.fc.in_features, self.fc_dim)
+
+        elif "vgg" in net:
+            self.backbone = func(weights=weights)
+            self.backbone.classifier.apply(weight_reset)
+            self.backbone.classifier[-1] = \
+                nn.Linear(self.backbone.classifier[-1].in_features,
+                          self.fc_dim)
+
     def forward(self, x):
         x = self.backbone(x)
         output = []
@@ -135,5 +149,6 @@ def conv1x1(in_planes: int, out_planes: int, stride: int = 1, bias: bool = False
 
 func_dict = {
     'resnet18': (resnet18, 512),
-    'resnet50': (resnet50, 2048)
+    'resnet50': (resnet50, 2048),
+    'vgg19': (vgg19, 0),
 }

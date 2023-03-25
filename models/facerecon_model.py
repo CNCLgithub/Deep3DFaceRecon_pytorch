@@ -21,7 +21,9 @@ class FaceReconModel(BaseModel):
         """  Configures options specific for CUT model
         """
         # net structure and parameters
-        parser.add_argument('--net_recon', type=str, default='resnet50', choices=['resnet18', 'resnet34', 'resnet50'], help='network structure')
+        parser.add_argument('--net_recon', type=str, default='resnet50',
+                            choices=['resnet18', 'resnet34', 'resnet50', 'vgg19'],
+                            help='network structure')
         # parser.add_argument('--init_path', type=str, default='checkpoints/init_model/resnet50-0676ba61.pth')
         parser.add_argument('--no-pretrained', action="store_false", dest="pretrained")
         parser.add_argument('--use_last_fc', type=util.str2bool, nargs='?', const=True, default=False, help='zero initialize the last fc')
